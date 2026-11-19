@@ -1,0 +1,304 @@
+/* ---------- 1. Colours and sizes (change them here, they update everywhere) ---------- */
+:root {
+  --bg: #e9eeee;
+  --surface: #ffffff;
+  --ink: #16252b;
+  --muted: #5a6b72;
+  --line: #cdd8d9;
+  --teal: #0e6b66;
+  --teal-dark: #0a4f4b;
+
+  --ok: #1f7a3e;
+  --ok-bg: #dcf0e1;
+  --bad: #a82a2a;
+  --bad-bg: #f8dedc;
+  --wait: #8a5a00;
+  --wait-bg: #fbecc8;
+  --idle: #455a64;
+  --idle-bg: #e1e8ea;
+
+  --radius: 6px;
+  --font: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+}
+
+/* ---------- 2. Basics ---------- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg);
+  display: grid;
+  grid-template-columns: 13rem 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "top  top"
+    "menu main";
+}
+
+h1 { font-size: 1.75rem; line-height: 1.2; margin: 0 0 0.5rem; }
+h2 { font-size: 1.15rem; margin: 2rem 0 0.75rem; }
+h3 { font-size: 1rem; margin: 0; }
+p  { margin: 0 0 0.5rem; }
+
+.hint { color: var(--muted); margin-bottom: 1.25rem; }
+
+/* Hidden on screen, still read by screen readers */
+.sr {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+
+/* ---------- 3. Top bar ---------- */
+.topbar {
+  grid-area: top;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--ink);
+  color: #fff;
+}
+.brand { font-size: 1.2rem; margin-right: auto; }
+.who { color: #b8c7cb; font-size: 0.9rem; }
+
+/* Network state: the most important thing for an usher to see */
+.net {
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.net-online  { background: var(--ok-bg);   color: var(--ok); }
+.net-offline { background: var(--wait-bg); color: var(--wait); }
+
+/* ---------- 4. Side menu ---------- */
+.menu {
+  grid-area: menu;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0.75rem;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+}
+.menu a {
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius);
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 500;
+}
+.menu a:hover { background: var(--bg); }
+
+/* ---------- 5. Screens: only one shows at a time ---------- */
+main { grid-area: main; padding: 1.5rem; max-width: 62rem; width: 100%; }
+
+.view { display: none; }
+.view:target { display: block; }
+
+/* If no screen is chosen yet, show the dashboard */
+main:not(:has(.view:target)) #dashboard { display: block; }
+
+/* Mark the menu link of the screen that is open */
+body:has(#register:target) a[href="#register"],
+body:has(#checkin:target)  a[href="#checkin"],
+body:has(#guests:target)   a[href="#guests"],
+body:has(#team:target)     a[href="#team"],
+body:has(#sync:target)     a[href="#sync"],
+body:not(:has(.view:target)) a[href="#dashboard"],
+body:has(#dashboard:target) a[href="#dashboard"] {
+  background: var(--teal);
+  color: #fff;
+}
+
+/* ---------- 6. Dashboard ---------- */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2.5rem;
+  margin: 1rem 0 0;
+  color: var(--muted);
+}
+.num {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-right: 0.35rem;
+}
+
+.gates {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  gap: 0.75rem;
+}
+.gate {
+  padding: 0.9rem 1rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border-left: 6px solid var(--idle);
+  font-size: 0.9rem;
+}
+.gate .count { font-size: 1.6rem; font-weight: 700; margin: 0.25rem 0; }
+.gate.open    { border-left-color: var(--ok); }
+.gate.waiting { border-left-color: #d99a1e; }
+.gate.closed  { border-left-color: var(--idle); color: var(--muted); }
+
+/* ---------- 7. Tables and badges ---------- */
+.table-wrap { overflow-x: auto; background: var(--surface); border-radius: var(--radius); margin-bottom: 1rem; }
+table { width: 100%; border-collapse: collapse; min-width: 30rem; }
+th, td { padding: 0.65rem 0.9rem; text-align: left; border-bottom: 1px solid var(--line); }
+th { font-size: 0.875rem; color: var(--muted); font-weight: 600; }
+tr:last-child td { border-bottom: 0; }
+
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.badge.ok   { background: var(--ok-bg);   color: var(--ok); }
+.badge.bad  { background: var(--bad-bg);  color: var(--bad); }
+.badge.wait { background: var(--wait-bg); color: var(--wait); }
+.badge.idle { background: var(--idle-bg); color: var(--idle); }
+
+/* ---------- 8. Forms and buttons ---------- */
+.split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1.25rem;
+  align-items: start;
+}
+.card {
+  padding: 1.25rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+}
+
+label { display: block; margin: 0.9rem 0 0.25rem; font-weight: 600; font-size: 0.9375rem; }
+.card > :first-child { margin-top: 0; }
+
+input[type="text"], input[type="tel"], input[type="email"], input[type="search"], select {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  border: 1px solid #9fb0b3;
+  border-radius: var(--radius);
+}
+input[type="checkbox"] { width: 1.2rem; height: 1.2rem; accent-color: var(--teal); }
+.search { max-width: 24rem; margin-bottom: 1rem; }
+
+fieldset { margin: 1rem 0 0; padding: 0; border: 0; }
+legend { font-weight: 600; font-size: 0.9375rem; padding: 0; margin-bottom: 0.25rem; }
+.choice { display: flex; align-items: center; gap: 0.5rem; margin: 0.25rem 0; font-weight: 400; }
+.choice input { width: 1.1rem; height: 1.1rem; accent-color: var(--teal); }
+
+.btn {
+  display: inline-block;
+  margin-top: 1.1rem;
+  padding: 0.7rem 1.25rem;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: var(--teal);
+  border: 2px solid var(--teal);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.btn:hover { background: var(--teal-dark); border-color: var(--teal-dark); }
+.btn.alt { background: transparent; color: var(--teal); }
+.btn.alt:hover { background: var(--teal); color: #fff; }
+
+/* ---------- 9. Guest pass (the thing the guest receives) ---------- */
+.pass {
+  padding: 1.25rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border-top: 8px solid var(--teal);
+  text-align: center;
+}
+.pass h2 { margin: 0.25rem 0; font-size: 1.5rem; }
+.pass-event { color: var(--muted); font-size: 0.9rem; }
+.code { font-size: 1.25rem; font-weight: 700; letter-spacing: 0.08em; }
+
+/* Placeholder for the real QR code (a script will draw it later) */
+.qr {
+  width: 10rem;
+  height: 10rem;
+  margin: 1rem auto;
+  background:
+    conic-gradient(var(--ink) 25%, #fff 0 50%, var(--ink) 0 75%, #fff 0) 0 0 / 1.25rem 1.25rem;
+  border: 0.6rem solid #fff;
+  outline: 2px solid var(--ink);
+}
+
+/* ---------- 10. Check-in screen ---------- */
+.scanner {
+  display: grid;
+  place-items: center;
+  height: 12rem;
+  margin-top: 1rem;
+  background: var(--ink);
+  color: #b8c7cb;
+  border-radius: var(--radius);
+}
+.or { text-align: center; color: var(--muted); margin: 1.25rem 0 0; }
+
+.results { display: grid; gap: 1rem; }
+.result { padding: 1.25rem; border-radius: var(--radius); border-left: 8px solid; }
+.result h2 { margin: 0; font-size: 1rem; }
+.result .big { font-size: 1.75rem; font-weight: 700; margin: 0.25rem 0; }
+.result.ok  { background: var(--ok-bg);  color: var(--ok);  border-color: var(--ok); }
+.result.bad { background: var(--bad-bg); color: var(--bad); border-color: var(--bad); }
+
+/* ---------- 11. Phones and tablets: menu goes to the top ---------- */
+@media (max-width: 700px) {
+  body {
+    grid-template-columns: 1fr;
+    grid-template-areas: "top" "menu" "main";
+    grid-template-rows: auto auto 1fr;
+  }
+  .menu {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 0.5rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .menu a { white-space: nowrap; }
+  main { padding: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* ---------- 12. Empty states (what shows before the backend sends data) ---------- */
+
+/* The "hidden" word must always win, even over our own display rules */
+[hidden] { display: none !important; }
+
+.empty { color: var(--muted); }
+.pass-empty { padding: 1.5rem 0; margin: 0; }
+
+.empty-row td { padding: 1.5rem; text-align: center; color: var(--muted); }
+
+/* Grey look for a result that has no answer yet */
+.result.idle { background: var(--idle-bg); color: var(--idle); border-color: var(--idle); }
+
+/* No name yet, so no empty space in the top bar */
+.who:empty { display: none; }
+
+/* Grey badge for "no connection to the server" */
+.net-idle { background: var(--idle-bg); color: var(--idle); }

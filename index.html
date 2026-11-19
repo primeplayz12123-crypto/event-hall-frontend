@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hall Gate - Event Hall Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top bar. The ids (net-status, user-name) are the "handles" your JavaScript will use to fill the text. -->
+  <header class="topbar">
+    <strong class="brand">Hall Gate</strong>
+    <span class="net net-idle" id="net-status" role="status">Not connected to server</span>
+    <span class="who" id="user-name"></span>
+  </header>
+
+  <nav class="menu" aria-label="Main menu">
+    <a href="#dashboard">Dashboard</a>
+    <a href="#register">Register guest</a>
+    <a href="#checkin">Check-in</a>
+    <a href="#guests">Guest list</a>
+    <a href="#team">Ushers and roles</a>
+    <a href="#sync">Sync</a>
+  </nav>
+
+  <main>
+
+    <!-- ========== 1. DASHBOARD ========== -->
+    <section class="view" id="dashboard">
+      <h1>Hall today</h1>
+
+      <div class="stats">
+        <p><span class="num" id="stat-registered">0</span> registered</p>
+        <p><span class="num" id="stat-inside">0</span> inside</p>
+        <p><span class="num" id="stat-waiting">0</span> not yet arrived</p>
+      </div>
+
+      <h2>The 5 entries</h2>
+      <div class="gates" id="gates">
+        <article class="gate" data-gate="1"><h3>Gate 1</h3><p class="count">0 in</p><p class="note">No usher yet</p></article>
+        <article class="gate" data-gate="2"><h3>Gate 2</h3><p class="count">0 in</p><p class="note">No usher yet</p></article>
+        <article class="gate" data-gate="3"><h3>Gate 3</h3><p class="count">0 in</p><p class="note">No usher yet</p></article>
+        <article class="gate" data-gate="4"><h3>Gate 4</h3><p class="count">0 in</p><p class="note">No usher yet</p></article>
+        <article class="gate" data-gate="5"><h3>Gate 5</h3><p class="count">0 in</p><p class="note">No usher yet</p></article>
+      </div>
+
+      <h2>Latest scans</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Time</th><th>Guest</th><th>Gate</th><th>Result</th></tr>
+          </thead>
+          <!-- The API data goes inside this tbody. The empty row is removed when real rows arrive. -->
+          <tbody id="scans-body">
+            <tr class="empty-row"><td colspan="4">No scans yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== 2. REGISTER GUEST ========== -->
+    <section class="view" id="register">
+      <h1>Register a guest</h1>
+      <p class="hint">Admin and any usher with permission can do this.</p>
+
+      <div class="split">
+        <form class="card" id="register-form" action="#register" method="post">
+          <label for="g-name">Full name</label>
+          <input id="g-name" name="name" type="text" autocomplete="off" required>
+
+          <label for="g-phone">Phone number</label>
+          <input id="g-phone" name="phone" type="tel">
+
+          <label for="g-email">Email (optional)</label>
+          <input id="g-email" name="email" type="email">
+
+          <label for="g-type">Ticket type</label>
+          <select id="g-type" name="type">
+            <option>General</option>
+            <option>VIP</option>
+            <option>Speaker</option>
+            <option>Staff</option>
+          </select>
+
+          <fieldset>
+            <legend>How will the guest get in?</legend>
+            <label class="choice"><input type="radio" name="method" checked> QR code</label>
+            <label class="choice"><input type="radio" name="method"> Access code</label>
+          </fieldset>
+
+          <button class="btn" type="submit">Register and create pass</button>
+        </form>
+
+        <!-- The pass. "hidden" means the browser does not show that part until JavaScript removes the word. -->
+        <aside class="pass" aria-label="Guest pass">
+          <p class="empty pass-empty" id="pass-empty">The guest's pass will show here after you register them.</p>
+
+          <div id="pass-content" hidden>
+            <p class="pass-event" id="pass-event"></p>
+            <h2 id="pass-name"></h2>
+            <p id="pass-type"></p>
+            <div class="qr" role="img" aria-label="QR code placeholder"></div>
+            <p class="code" id="pass-code"></p>
+            <button class="btn alt" type="button">Send by WhatsApp or SMS</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ========== 3. CHECK-IN (USHER SCREEN) ========== -->
+    <section class="view" id="checkin">
+      <h1>Check-in</h1>
+
+      <div class="split">
+        <div class="card">
+          <label for="gate-pick">This device is at</label>
+          <select id="gate-pick">
+            <option>Gate 1</option>
+            <option>Gate 2</option>
+            <option>Gate 3</option>
+            <option>Gate 4</option>
+            <option>Gate 5</option>
+          </select>
+
+          <div class="scanner" role="img" aria-label="Camera area for scanning QR codes">
+            <p>Camera opens here</p>
+          </div>
+          <button class="btn" type="button">Scan QR code</button>
+
+          <p class="or">or type the access code</p>
+          <label for="code-in">Access code</label>
+          <input id="code-in" type="text" inputmode="numeric" autocomplete="off">
+          <button class="btn alt" type="button">Check code</button>
+        </div>
+
+        <div class="results">
+          <!-- Shown at first -->
+          <article class="result idle" id="result-empty">
+            <h2>Waiting for a scan</h2>
+            <p>Scan a QR code or type an access code. The answer shows here.</p>
+          </article>
+
+          <!-- Hidden at first. JavaScript shows one of these two after a check. -->
+          <article class="result ok" id="result-ok" hidden>
+            <h2>Let in</h2>
+            <p class="big" id="ok-name"></p>
+            <p id="ok-info"></p>
+          </article>
+
+          <article class="result bad" id="result-bad" hidden>
+            <h2>Do not let in</h2>
+            <p class="big" id="bad-reason"></p>
+            <p id="bad-info"></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 4. GUEST LIST ========== -->
+    <section class="view" id="guests">
+      <h1>Guest list</h1>
+      <label for="search" class="sr">Search guests</label>
+      <input id="search" class="search" type="search" placeholder="Search by name, phone or code">
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Phone</th><th>Ticket</th><th>Registered by</th><th>Status</th></tr>
+          </thead>
+          <tbody id="guests-body">
+            <tr class="empty-row"><td colspan="5">No guests yet. Register a guest to start the list.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== 5. USHERS AND ROLES (ADMIN ONLY) ========== -->
+    <section class="view" id="team">
+      <h1>Ushers and roles</h1>
+      <p class="hint">Only the super admin sees this screen.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Role</th><th>Gate</th><th>Can register guests</th></tr>
+          </thead>
+          <tbody id="team-body">
+            <tr class="empty-row"><td colspan="4">No ushers yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <button class="btn" type="button">Add usher</button>
+    </section>
+
+    <!-- ========== 6. SYNC ========== -->
+    <section class="view" id="sync">
+      <h1>Sync</h1>
+      <p class="hint">Devices on the hall network share check-ins even when the internet is weak.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Device</th><th>Gate</th><th>Last synced</th><th>Waiting to send</th></tr>
+          </thead>
+          <tbody id="sync-body">
+            <tr class="empty-row"><td colspan="4">No devices connected yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <button class="btn" type="button">Sync now</button>
+    </section>
+
+  </main>
+</body>
+</html>
