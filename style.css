@@ -18,7 +18,8 @@
   --idle-bg: #e1e8ea;
 
   --radius: 6px;
-  --font: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  /* System fonts only: they load at once and also work with no internet */
+  --font: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
 }
 
 /* ---------- 2. Basics ---------- */
@@ -32,6 +33,12 @@ body {
   line-height: 1.5;
   color: var(--ink);
   background: var(--bg);
+}
+
+/* The app layout: top bar, side menu and main area */
+.app {
+  min-height: 100vh;
+  min-height: 100dvh; /* fits phone screens better */
   display: grid;
   grid-template-columns: 13rem 1fr;
   grid-template-rows: auto 1fr;
@@ -187,7 +194,7 @@ tr:last-child td { border-bottom: 0; }
 label { display: block; margin: 0.9rem 0 0.25rem; font-weight: 600; font-size: 0.9375rem; }
 .card > :first-child { margin-top: 0; }
 
-input[type="text"], input[type="tel"], input[type="email"], input[type="search"], select {
+input[type="text"], input[type="password"], input[type="tel"], input[type="email"], input[type="search"], select {
   width: 100%;
   padding: 0.65rem 0.75rem;
   font: inherit;
@@ -264,7 +271,7 @@ legend { font-weight: 600; font-size: 0.9375rem; padding: 0; margin-bottom: 0.25
 
 /* ---------- 11. Phones and tablets: menu goes to the top ---------- */
 @media (max-width: 700px) {
-  body {
+  .app {
     grid-template-columns: 1fr;
     grid-template-areas: "top" "menu" "main";
     grid-template-rows: auto auto 1fr;
@@ -276,7 +283,7 @@ legend { font-weight: 600; font-size: 0.9375rem; padding: 0; margin-bottom: 0.25
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
-  .menu a { white-space: nowrap; }
+  .menu a { white-space: nowrap; padding: 0.75rem 1rem; }
   main { padding: 1rem; }
 }
 
@@ -302,3 +309,59 @@ legend { font-weight: 600; font-size: 0.9375rem; padding: 0; margin-bottom: 0.25
 
 /* Grey badge for "no connection to the server" */
 .net-idle { background: var(--idle-bg); color: var(--idle); }
+
+/* ---------- 13. Who sees what (set by data-role on <body>) ---------- */
+/* super-admin has no rule here, so it sees everything */
+body[data-role="usher"] .admin-only,
+body[data-role="guest"] .admin-only,
+body[data-role="guest"] .staff-only,
+body:not([data-role="guest"]) .guest-only { display: none !important; }
+
+/* A guest opens on "My pass" */
+body[data-role="guest"] main:not(:has(.view:target)) #mypass { display: block; }
+body[data-role="guest"]:not(:has(.view:target)) a[href="#mypass"],
+body:has(#mypass:target) a[href="#mypass"] { background: var(--teal); color: #fff; }
+
+#mypass .pass { max-width: 20rem; }
+
+.logout {
+  padding: 0.25rem 0.75rem;
+  color: #fff;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border: 1px solid #5a6b72;
+  border-radius: var(--radius);
+}
+.logout:hover { background: #2b3f46; }
+
+/* ---------- 14. Login page ---------- */
+.login-screen { min-height: 100vh; min-height: 100dvh; display: flex; justify-content: center; align-items: center; padding: 1rem; }
+
+/* Logged out = no data-role on <body>. Show the login screen and hide the app. */
+body:not([data-role]) .app { display: none; }
+body[data-role] .login-screen { display: none; }
+
+.login-box {
+  width: 100%;
+  max-width: 24rem;
+  padding: 2rem 1.75rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border-top: 8px solid var(--teal);
+}
+.login-brand { margin-bottom: 1rem; font-weight: 700; color: var(--teal); }
+.login-box .hint { margin-bottom: 0.5rem; }
+.login-help { margin: 1.25rem 0 0; font-size: 0.9rem; color: var(--muted); text-align: center; }
+
+.btn.wide { width: 100%; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Error from the server, for example "Wrong password". Hidden when empty. */
+.form-error {
+  margin: 1rem 0 0;
+  padding: 0.6rem 0.75rem;
+  color: var(--bad);
+  background: var(--bad-bg);
+  border-radius: var(--radius);
+}
+.form-error:empty { display: none; }
