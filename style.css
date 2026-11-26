@@ -1,66 +1,70 @@
-/* 1. The whole page */
 body {
-  font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f4f6f9;
-  color: #1e293b;
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  line-height: 1.5;
+  color: #16252b;
+  background-color: #e9eeee;
 }
 
-/* Top bar */
+h1 {
+  font-size: 28px;
+  margin-top: 0;
+}
+
+h2 {
+  margin: 0;
+}
+
 .topbar {
-  background-color: #0f172a;
-  color: #f8fafc;
-  padding: 14px 18px;
-  border-radius: 8px;
-  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background-color: #16252b;
+  color: white;
 }
 
 .topbar a {
-  color: #93c5fd;
+  color: white;
+  padding: 4px 12px;
+  border: 1px solid #5a6b72;
+  border-radius: 6px;
   text-decoration: none;
 }
 
-.topbar a:hover {
-  color: #bfdbfe;
-  text-decoration: underline;
-}
-
-/* 2. Menu links and sections */
 .menu {
-  background-color: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 10px 14px;
-  margin-bottom: 24px;
+  padding: 10px 20px;
+  background-color: white;
+  border-bottom: 1px solid #cdd8d9;
 }
 
 .menu a {
-  margin-right: 12px;
-  color: #1d4ed8;
-  font-weight: bold;
+  display: inline-block;
+  padding: 8px 12px;
+  color: #16252b;
   text-decoration: none;
+  font-weight: bold;
+  border-radius: 6px;
 }
 
 .menu a:hover {
-  color: #1e40af;
-  text-decoration: underline;
+  background-color: #0e6b66;
+  color: white;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 section {
-  background-color: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 18px 20px;
-  margin-bottom: 24px;
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
 }
 
-h1, h3 {
-  color: #0f172a;
-}
-
-/* 3. Boxes (dashboard numbers, gates, results) */
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -68,101 +72,95 @@ h1, h3 {
 }
 
 .box {
-  background-color: #f8fafc;
-  border: 1px solid #cbd5e1;
-  border-left: 4px solid #2563eb;
-  border-radius: 6px;
-  padding: 12px;
+  padding: 15px;
   margin-top: 10px;
-  color: #1e293b;
+  background-color: #e9eeee;
+  border-left: 6px solid #0e6b66;
+  border-radius: 6px;
 }
 
 .box b {
-  color: #1d4ed8;
+  font-size: 28px;
 }
 
-/* Login card */
-.login-box {
-  background-color: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 24px;
-  margin-top: 40px;
-}
-
-.login-box a {
-  color: #2563eb;
-}
-
-/* 4. Forms */
 label {
   display: block;
-  margin-top: 10px;
-  color: #334155;
+  margin-top: 12px;
   font-weight: bold;
 }
 
 input, select {
-  padding: 8px;
-  background-color: #ffffff;
-  color: #0f172a;
-  border: 1px solid #94a3b8;
-  border-radius: 5px;
-}
-
-input:focus, select:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  width: 100%;
+  max-width: 350px;
+  padding: 10px;
+  margin-top: 4px;
+  font-size: 16px;
+  border: 1px solid #9fb0b3;
+  border-radius: 6px;
 }
 
 button {
   display: block;
-  margin-top: 12px;
-  padding: 9px 16px;
-  background-color: #2563eb;
-  color: #ffffff;
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #0e6b66;
   border: none;
   border-radius: 6px;
-  font-weight: bold;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #1d4ed8;
+  background-color: #0a4f4b;
 }
 
-/* 5. Tables */
+button:disabled {
+  opacity: 0.6;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #ffffff;
-  margin-top: 10px;
-}
-
-thead {
-  background-color: #1e293b;
-  color: #f8fafc;
 }
 
 th, td {
-  border: 1px solid #cbd5e1;
-  padding: 8px;
+  padding: 10px;
   text-align: left;
+  border-bottom: 1px solid #cdd8d9;
 }
 
-tbody tr:nth-child(even) {
-  background-color: #f8fafc;
+th {
+  color: #5a6b72;
 }
 
-tbody tr:hover {
-  background-color: #eff6ff;
+.login-box {
+  max-width: 350px;
+  margin: 80px auto;
+  padding: 30px;
+  background-color: white;
+  border-top: 8px solid #0e6b66;
+  border-radius: 6px;
 }
 
-/* 6. Error text and hiding */
+.login-box input {
+  max-width: 100%;
+}
+
+.login-box button {
+  width: 100%;
+}
+
 .error {
-  color: #dc2626;
-  font-weight: bold;
+  padding: 10px;
+  color: #a82a2a;
+  background-color: #f8dedc;
+  border-radius: 6px;
+}
+
+.error:empty {
+  display: none;
 }
 
 .hidden {

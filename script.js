@@ -1,5 +1,5 @@
 
-const API = "https://event-manager-rx5n.onrender.com";
+const API = "https://event-manager-rx5n.onrender.com/api";
 
 
 const loginForm = document.getElementById("login-form");
