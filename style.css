@@ -166,3 +166,9 @@ th {
 .hidden {
   display: none;
 }
+
+@media print {
+  .topbar, .menu, button, #dashboard, #register, #checkin, #team, #sync {
+    display: none;
+  }
+}

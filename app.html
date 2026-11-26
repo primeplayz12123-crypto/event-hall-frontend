@@ -21,7 +21,7 @@
     <a href="#register">Register guest</a>
     <a href="#checkin">Check-in</a>
     <a href="#guests">Guest list</a>
-    <a href="#team">Ushers</a>
+    <a href="#team">Staff</a>
     <a href="#sync">Sync</a>
   </nav>
 
@@ -124,31 +124,43 @@
     <section id="guests">
       <h1>Guest list</h1>
 
-      <input id="search" type="search" placeholder="Search by name or code">
+      <button id="print-btn" type="button">Print the list</button>
 
       <table>
         <thead>
-          <tr><th>Name</th><th>Phone</th><th>Ticket</th><th>Status</th></tr>
+          <tr><th>Name</th><th>Phone</th><th>Ticket</th><th>Code</th><th>Status</th></tr>
         </thead>
         <tbody id="guests-body">
-          <tr><td colspan="4">No guests yet.</td></tr>
+          <tr><td colspan="5">No guests yet.</td></tr>
         </tbody>
       </table>
     </section>
 
     <!-- 5. USHERS (super admin only) -->
     <section id="team">
-      <h1>Ushers</h1>
+      <h1>Staff</h1>
+      <p>Only the super admin can add staff.</p>
 
-      <table>
-        <thead>
-          <tr><th>Name</th><th>Role</th><th>Gate</th></tr>
-        </thead>
-        <tbody id="team-body">
-          <tr><td colspan="3">No ushers yet.</td></tr>
-        </tbody>
-      </table>
-      <button type="button">Add usher</button>
+      <form id="staff-form">
+        <label for="s-name">Full name</label>
+        <input id="s-name" type="text" required>
+
+        <label for="s-email">Email</label>
+        <input id="s-email" type="email" required>
+
+        <label for="s-pass">Password</label>
+        <input id="s-pass" type="password" required>
+
+        <label for="s-role">Role</label>
+        <select id="s-role">
+          <option value="usher">Usher</option>
+          <option value="registrar">Registrar</option>
+        </select>
+
+        <p id="staff-error" class="error"></p>
+
+        <button type="submit">Add staff</button>
+      </form>
     </section>
 
     <!-- 6. SYNC -->
