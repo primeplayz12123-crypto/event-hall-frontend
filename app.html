@@ -27,7 +27,7 @@
 
   <main>
 
-    
+    <!-- 1. DASHBOARD -->
     <section id="dashboard">
       <h1>Dashboard</h1>
 
@@ -57,7 +57,7 @@
       </table>
     </section>
 
-   
+    <!-- 2. REGISTER GUEST -->
     <section id="register">
       <h1>Register a guest</h1>
 
@@ -79,10 +79,12 @@
           <option>Staff</option>
         </select>
 
+        <p id="register-error" class="error"></p>
+
         <button type="submit">Register</button>
       </form>
 
-    
+      <!-- The guest pass shows here after registering -->
       <div class="box">
         <h3>Guest pass</h3>
         <p id="pass-empty">The pass will show here after you register a guest.</p>
@@ -94,7 +96,7 @@
       </div>
     </section>
 
-   
+    <!-- 3. CHECK-IN -->
     <section id="checkin">
       <h1>Check-in</h1>
 
@@ -111,7 +113,7 @@
       <input id="code-in" type="text">
       <button type="button">Check code</button>
 
-     
+      <!-- The answer shows here -->
       <div class="box">
         <h3>Result</h3>
         <p id="check-result">Waiting for a code.</p>
@@ -134,7 +136,7 @@
       </table>
     </section>
 
-   
+    <!-- 5. USHERS (super admin only) -->
     <section id="team">
       <h1>Ushers</h1>
 
@@ -149,7 +151,7 @@
       <button type="button">Add usher</button>
     </section>
 
-    
+    <!-- 6. SYNC -->
     <section id="sync">
       <h1>Sync</h1>
       <p>Send check-ins saved on this device when the internet comes back.</p>
@@ -167,5 +169,6 @@
 
   </main>
 
+  <script src="app.js"></script>
 </body>
 </html>
