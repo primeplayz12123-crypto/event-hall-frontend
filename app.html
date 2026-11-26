@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hall Gate - Event Hall Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <h2>Hall Gate</h2>
+    <span id="user-name"></span>
+    <a href="index.html">Log out</a>
+  </header>
+
+  <!-- MENU: each link jumps to a section below -->
+  <nav class="menu">
+    <a href="#dashboard">Dashboard</a>
+    <a href="#register">Register guest</a>
+    <a href="#checkin">Check-in</a>
+    <a href="#guests">Guest list</a>
+    <a href="#team">Ushers</a>
+    <a href="#sync">Sync</a>
+  </nav>
+
+  <main>
+
+    
+    <section id="dashboard">
+      <h1>Dashboard</h1>
+
+      <div class="row">
+        <div class="box"><b id="stat-registered">0</b> registered</div>
+        <div class="box"><b id="stat-inside">0</b> inside</div>
+        <div class="box"><b id="stat-waiting">0</b> not yet arrived</div>
+      </div>
+
+      <h3>The 5 gates</h3>
+      <div class="row">
+        <div class="box">Gate 1: 0 in</div>
+        <div class="box">Gate 2: 0 in</div>
+        <div class="box">Gate 3: 0 in</div>
+        <div class="box">Gate 4: 0 in</div>
+        <div class="box">Gate 5: 0 in</div>
+      </div>
+
+      <h3>Latest scans</h3>
+      <table>
+        <thead>
+          <tr><th>Time</th><th>Guest</th><th>Gate</th><th>Result</th></tr>
+        </thead>
+        <tbody id="scans-body">
+          <tr><td colspan="4">No scans yet.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+   
+    <section id="register">
+      <h1>Register a guest</h1>
+
+      <form id="register-form">
+        <label for="g-name">Full name</label>
+        <input id="g-name" type="text" required>
+
+        <label for="g-phone">Phone number</label>
+        <input id="g-phone" type="tel">
+
+        <label for="g-email">Email (optional)</label>
+        <input id="g-email" type="email">
+
+        <label for="g-type">Ticket type</label>
+        <select id="g-type">
+          <option>General</option>
+          <option>VIP</option>
+          <option>Speaker</option>
+          <option>Staff</option>
+        </select>
+
+        <button type="submit">Register</button>
+      </form>
+
+    
+      <div class="box">
+        <h3>Guest pass</h3>
+        <p id="pass-empty">The pass will show here after you register a guest.</p>
+        <div id="pass-content" class="hidden">
+          <p id="pass-name"></p>
+          <p id="pass-type"></p>
+          <p id="pass-code"></p>
+        </div>
+      </div>
+    </section>
+
+   
+    <section id="checkin">
+      <h1>Check-in</h1>
+
+      <label for="gate-pick">This device is at</label>
+      <select id="gate-pick">
+        <option value="1">Gate 1</option>
+        <option value="2">Gate 2</option>
+        <option value="3">Gate 3</option>
+        <option value="4">Gate 4</option>
+        <option value="5">Gate 5</option>
+      </select>
+
+      <label for="code-in">Type the access code</label>
+      <input id="code-in" type="text">
+      <button type="button">Check code</button>
+
+     
+      <div class="box">
+        <h3>Result</h3>
+        <p id="check-result">Waiting for a code.</p>
+      </div>
+    </section>
+
+    <!-- 4. GUEST LIST -->
+    <section id="guests">
+      <h1>Guest list</h1>
+
+      <input id="search" type="search" placeholder="Search by name or code">
+
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Phone</th><th>Ticket</th><th>Status</th></tr>
+        </thead>
+        <tbody id="guests-body">
+          <tr><td colspan="4">No guests yet.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+   
+    <section id="team">
+      <h1>Ushers</h1>
+
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Role</th><th>Gate</th></tr>
+        </thead>
+        <tbody id="team-body">
+          <tr><td colspan="3">No ushers yet.</td></tr>
+        </tbody>
+      </table>
+      <button type="button">Add usher</button>
+    </section>
+
+    
+    <section id="sync">
+      <h1>Sync</h1>
+      <p>Send check-ins saved on this device when the internet comes back.</p>
+
+      <table>
+        <thead>
+          <tr><th>Device</th><th>Gate</th><th>Last synced</th><th>Waiting</th></tr>
+        </thead>
+        <tbody id="sync-body">
+          <tr><td colspan="4">No devices yet.</td></tr>
+        </tbody>
+      </table>
+      <button type="button">Sync now</button>
+    </section>
+
+  </main>
+
+</body>
+</html>
